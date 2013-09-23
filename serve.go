@@ -4,12 +4,14 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"path/filepath"
 )
 
 var addr = flag.String("addr", "localhost:10000", "address to serve from")
 var verbose = flag.Bool("v", false, "verbose logging")
+var veryVerbose = flag.Bool("vv", false, "very verbose logging, dumping requests")
 
 func main() {
 	// flag.Usage = usage // TODO(jmhodges): busted usage
@@ -30,8 +32,13 @@ func main() {
 	}
 
 	h := http.FileServer(http.Dir(path))
-	if *verbose {
+	if *verbose || *veryVerbose {
 		log.Printf("Serving %s on %s", path, *addr)
+	}
+
+	if *veryVerbose {
+		h = &requestDumpHandler{h}
+	} else if *verbose {
 		h = &verboseHandler{h}
 	}
 	log.Fatal(http.ListenAndServe(*addr, h))
@@ -42,6 +49,21 @@ type verboseHandler struct {
 }
 
 func (vh *verboseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("Client requested " + r.URL.String())
+	log.Printf("%s %s %s", r.Method, r.URL.String(), r.Proto)
 	vh.inner.ServeHTTP(w, r)
+}
+
+type requestDumpHandler struct {
+	inner http.Handler
+}
+
+func (rh *requestDumpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	bs, err := httputil.DumpRequest(r, true)
+	if err == nil {
+		log.Printf("----------------\n%s\n", string(bs))
+		log.Println("----------------")
+	} else {
+		log.Println("Unable to dump request: %s", err)
+	}
+	rh.inner.ServeHTTP(w, r)
 }
