@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -13,8 +14,14 @@ var addr = flag.String("addr", "localhost:10000", "address to serve from")
 var verbose = flag.Bool("v", false, "verbose logging")
 var veryVerbose = flag.Bool("vv", false, "very verbose logging, dumping requests")
 
+func usage() {
+	fmt.Fprintf(os.Stderr, "usage: serve [DIR]\n")
+	flag.PrintDefaults()
+	os.Exit(1)
+}
+
 func main() {
-	// flag.Usage = usage // TODO(jmhodges): busted usage
+	flag.Usage = usage
 	flag.Parse()
 	if len(flag.Args()) > 1 {
 		log.Fatalf("trailing flags after directory path was given")
