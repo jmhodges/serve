@@ -1,8 +1,8 @@
 serve
 =====
 
-Serve is yet another file server command. Every Go developer has built one, and
-this one is mine.
+Serve is a file server command. Every Go developer has built one, and this one
+is mine.
 
 It serves up a directory of content for you to play with in a browser or other
 HTTP client. Requests to `/my/path` will be translated to
