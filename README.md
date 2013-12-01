@@ -30,3 +30,5 @@ The easiest way of installing serve is to [install Go][installgo] (being sure
 to set up a working `$GOPATH`, detailed in those instructions), and running
 
     go get github.com/jmhodges/serve
+
+[installgo]: http://golang.org/doc/install#install
