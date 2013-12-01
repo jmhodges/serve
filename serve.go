@@ -20,24 +20,41 @@ func usage() {
 	os.Exit(1)
 }
 
+func die(sfmt string, objs ...interface{}) {
+	fmt.Fprintf(os.Stderr, "serve: " + sfmt + "\n", objs...)
+	os.Exit(1)
+}
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
 	if len(flag.Args()) > 1 {
-		log.Fatalf("trailing flags after directory path was given")
+		fmt.Fprintf(os.Stderr, "serve: trailing flags were found after directory path\n")
+		usage()
 	}
 	path := flag.Arg(0)
 
-	var err error
 	if path == "" {
-		path, err = os.Getwd()
+		cwd, err := os.Getwd()
+		if err != nil {
+			die("unable to find current working directory")
+		}
+		path = cwd
 	} else {
-		path, err = filepath.Abs(path)
-	}
-	if err != nil {
-		log.Fatal(err)
+		absPath, err := filepath.Abs(path)
+		if err != nil {
+			die("unable to make '%s' an absolute path", path)
+		}
+		path = absPath
 	}
 
+	fi, err := os.Stat(path)
+	if err != nil {
+		die("'%s' does not exist", path)
+	}
+	if !fi.IsDir() {
+		die("'%s' was not a directory", path)
+	}
 	h := http.FileServer(http.Dir(path))
 	if *verbose || *veryVerbose {
 		log.Printf("Serving %s on %s", path, *addr)
