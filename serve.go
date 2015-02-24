@@ -11,8 +11,8 @@ import (
 )
 
 var addr = flag.String("addr", "localhost:10000", "address to serve from")
-var verbose = flag.Bool("v", false, "verbose logging")
-var veryVerbose = flag.Bool("vv", false, "very verbose logging, dumping requests")
+var quiet = flag.Bool("q", false, "log nothing")
+var verbose = flag.Bool("v", false, "verbose logging, dumping requests")
 
 func usage() {
 	fmt.Fprintf(os.Stderr, "usage: serve [DIR]\n")
@@ -21,7 +21,7 @@ func usage() {
 }
 
 func die(sfmt string, objs ...interface{}) {
-	fmt.Fprintf(os.Stderr, "serve: " + sfmt + "\n", objs...)
+	fmt.Fprintf(os.Stderr, "serve: "+sfmt+"\n", objs...)
 	os.Exit(1)
 }
 
@@ -32,6 +32,11 @@ func main() {
 		fmt.Fprintf(os.Stderr, "serve: trailing flags were found after directory path\n")
 		usage()
 	}
+	if *quiet && *verbose {
+		fmt.Fprintf(os.Stderr, "serve: cannot specify both -q and -v at the same time\n")
+		usage()
+	}
+
 	path := flag.Arg(0)
 
 	if path == "" {
@@ -56,13 +61,13 @@ func main() {
 		die("'%s' was not a directory", path)
 	}
 	h := http.FileServer(http.Dir(path))
-	if *verbose || *veryVerbose {
+	if !*quiet {
 		log.Printf("Serving %s on %s", path, *addr)
 	}
 
-	if *veryVerbose {
+	if *verbose {
 		h = &requestDumpHandler{h}
-	} else if *verbose {
+	} else if !*quiet {
 		h = &verboseHandler{h}
 	}
 	log.Fatal(http.ListenAndServe(*addr, h))
