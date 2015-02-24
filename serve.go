@@ -10,9 +10,11 @@ import (
 	"path/filepath"
 )
 
-var addr = flag.String("addr", "localhost:10000", "address to serve from")
-var quiet = flag.Bool("q", false, "log nothing")
-var verbose = flag.Bool("v", false, "verbose logging, dumping requests")
+var (
+	addr    = flag.String("addr", "localhost:10000", "address to serve from")
+	quiet   = flag.Bool("q", false, "log nothing")
+	verbose = flag.Bool("v", false, "verbose logging, dumping requests")
+)
 
 func usage() {
 	fmt.Fprintf(os.Stderr, "usage: serve [DIR]\n")
