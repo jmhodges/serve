@@ -9,7 +9,7 @@ HTTP client. Requests to `/my/path` will be translated to
 `/passed/in/dir/my/path`.
 
 When I'm working on the webserver we built at work, I like to use it as the
-backend service for testing requests with `-vv` turned on.
+backend service for testing requests with `-v` turned on.
 
 By default, serve will boot on `localhost:10000` with the current directory as
 its serving path.
@@ -20,8 +20,8 @@ Usage
     $  serve -h
     usage: serve [DIR]
       -addr="localhost:10000": address to serve from
-      -v=false: verbose logging
-      -vv=false: very verbose logging, dumping requests
+      -q=false: log nothing
+      -v=false: verbose logging, dumping requests
 
 Installing
 ----------
