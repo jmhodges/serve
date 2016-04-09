@@ -30,7 +30,7 @@ func die(sfmt string, objs ...interface{}) {
 }
 
 func main() {
-	flag.Var(&headers, "H", "header to set on the response, may be specified multiple times")
+	flag.Var(&headers, "H", "column-separated header key and value to set on the response, may be specified multiple times")
 	flag.Usage = usage
 	flag.Parse()
 	if len(flag.Args()) > 1 {
