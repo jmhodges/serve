@@ -119,7 +119,7 @@ func (rh *requestDumpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		log.Printf("----------------\n%s\n", string(bs))
 		log.Println("----------------")
 	} else {
-		log.Println("Unable to dump request: %s", err)
+		log.Printf("Unable to dump request: %s", err)
 	}
 	rh.inner.ServeHTTP(w, r)
 }
