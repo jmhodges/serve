@@ -19,9 +19,12 @@ Usage
 
     $  serve -h
     usage: serve [DIR]
-      -addr="localhost:10000": address to serve from
-      -q=false: log nothing
-      -v=false: verbose logging, dumping requests
+    -H value
+            colon-separated header key and value to set on the response, may be specified multiple times
+    -addr string
+            address to serve from (default "localhost:10000")
+    -q	log nothing
+    -v	verbose logging, dumping requests
 
 Installing
 ----------
