@@ -1,5 +1,4 @@
-serve
-=====
+# serve
 
 Serve is a HTTP file server command. Every Go developer has built one, and this
 one is mine.
@@ -14,8 +13,7 @@ backend service for testing requests with `-v` turned on.
 By default, serve will boot on `localhost:10000` with the current directory as
 its serving path.
 
-Usage
------
+## Usage
 
     $  serve -h
     usage: serve [DIR]
@@ -26,8 +24,7 @@ Usage
     -q	log nothing
     -v	verbose logging, dumping requests
 
-Installing
-----------
+## Installing
 
 The easiest way of installing serve is to [install Go][installgo] (being sure
 to set up a working `$GOPATH`, detailed in those instructions), and running
